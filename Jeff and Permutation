@@ -1,0 +1,105 @@
+#include<iostream>
+#include<fstream>
+#include<algorithm>
+#include<queue>
+#include<stack>
+#include<map>
+#include<set>
+#include<list>
+#include<cstdio>
+#include<cstring>
+#include<string>
+#include<cmath>
+#include<cstdlib>
+#include<vector>
+#include<climits>
+#include<ctime>
+#include<sstream>
+#define mp       	make_pair
+#define pb       	push_back
+#define st       	first
+#define nd       	second
+#define wait     	getchar();getchar();
+#define lint     	long long
+#define KARE(a)	 	( (a)*(a) )
+#define MAX(a,b) 	( (a)>(b) ? (a) : (b) )
+#define MIN(a,b) 	( (a)<(b) ? (a) : (b) )
+#define MAX3(a,b,c)	( MAX( a,MAX(b,c) ) )
+#define MIN3(a,b,c)	( MIN( a,MIN(b,c) ) )
+#define FILL(ar,a)	memset( ar,a,sizeof ar )
+#define oo	 		1e9
+#define pii       	pair<int,int>
+#define pll			pair<lint,lint>
+#define pdd			pair<double,double>
+#define y1			yy1
+#define eps      	(1e-9)
+#define esit(a,b)  	( abs( (a)-(b) ) < eps )
+#define sol(a)		( (a)<<1 )
+#define sag(a)		( sol(a)|1 )
+#define orta(a,b)	( ( (a)+(b) )>>1 )
+#define mxn       	2005
+#define mxs			100010
+using namespace std;
+
+vector<int>vec[mxs];
+
+int n,ans;
+int f[mxs];
+int ar[mxn];
+int lf[mxn],rg[mxn];
+
+void read(){
+
+	scanf( "%d" , &n );
+	for( int i=1 ; i<=n ; i++ )	scanf( "%d" , ar+i ),ar[i] = abs( ar[i] ),vec[ ar[i] ].pb( i );
+
+	return;
+
+}
+
+int find( int s ){
+
+	s+=3;
+
+	int ret = 0;
+	for( ; s>=1 ; s-=s&-s )	ret += f[s];
+
+	return ret;
+
+}
+
+void update( int s ){
+
+	s += 3;
+	for( ; s<mxs ; s+=s&-s )	f[s]++;
+	return;
+
+}
+
+void solve(){
+
+	int i,j;
+
+	read();
+
+	memset( f,0,sizeof f );
+	for( i=1 ; i<=n ; i++ )		lf[i] = find( ar[i]-1 ),update( ar[i] );
+
+	memset( f,0,sizeof f );
+	for( i=n ; i>=1 ; i-- )		rg[i] = find( ar[i]-1 ),update( ar[i] );
+
+	for( i=100000 ; i>=0 ; i-- )
+		for( j=0 ; j<vec[i].size() ; j++ )
+			if( lf[ vec[i][j] ] <= rg[ vec[i][j] ] )	ans += lf[ vec[i][j] ];
+			else										ans += rg[ vec[i][j] ];
+
+	printf( "%d\n" , ans );
+
+	return;
+
+}
+
+int main(){
+	solve();
+	return 0;
+}
